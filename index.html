@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BONANÇA YOGA — A bonança depois da tempestade | Yoga Integral</title>
+  <meta name="description" content="Bonança Yoga Integral. Onde o corpo ganha espaço, a respiração encontra prumo e a mente descansa na própria âncora." />
+
+  <!-- Google Fonts: Ibarra Real Nova (Fonte oficial da logo) + Plus Jakarta Sans + JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+  <!-- GSAP & ScrollTrigger via cdnjs.cloudflare.com SEM defer -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    :root {
+      --bg-sand: #F4EFE6;
+      --bg-sand-deep: #EAE1D3;
+      --bg-sand-card: #EFE8DC;
+      --clay-dark: #231712;
+      --clay-soft: #4A372F;
+      --clay-muted: #7D6A5F;
+      --ochre: #C88A36;
+      --terracotta: #B65938;
+      --bordeaux: #5E2326;
+      --pastel-sage: #DCE3D8;
+      --pastel-peach: #F0DCD0;
+      --line-subtle: rgba(35, 23, 18, 0.11);
+      --line-strong: rgba(35, 23, 18, 0.26);
+      --font-serif: 'Ibarra Real Nova', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html {
+      background-color: var(--bg-sand);
+      color: var(--clay-dark);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    body {
+      background-color: var(--bg-sand);
+      color: var(--clay-dark);
+      overflow-x: hidden;
+      position: relative;
+    }
+    ::selection { background: var(--pastel-peach); color: var(--bordeaux); }
+
+    /* Granulação Analógica 35mm */
+    .film-grain {
+      position: fixed; inset: 0; pointer-events: none; z-index: 9990; opacity: 0.032;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* Canvas de Rastro Sensorial (Efeito Yogamaya Autoral) */
+    #sensory-canvas {
+      position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 1;
+    }
+    .whisper-layer {
+      position: fixed; inset: 0; pointer-events: none; z-index: 25; overflow: hidden;
+    }
+    .somatic-whisper {
+      position: absolute; font-family: var(--font-serif); font-style: italic; font-size: 0.96rem;
+      color: var(--terracotta); letter-spacing: 0.03em; white-space: nowrap; pointer-events: none;
+      opacity: 0; transform: translate(-50%, -50%) translateY(10px);
+      transition: opacity 0.8s var(--ease-out-expo), transform 1.4s var(--ease-out-expo);
+    }
+
+    /* ATO 0: PRELOADER INTERATIVO — "A CORDA VIVA DA LOGO" */
+    #preloader {
+      position: fixed; inset: 0; background-color: var(--clay-dark); color: var(--bg-sand);
+      z-index: 10000; display: flex; flex-direction: column; justify-content: space-between;
+      align-items: center; padding: clamp(1.5rem, 4vw, 3rem);
+      transition: background-color 1.2s var(--ease-out-expo), color 1.2s var(--ease-out-expo), opacity 0.9s var(--ease-out-expo), visibility 0.9s;
+      user-select: none; cursor: pointer;
+    }
+    #preloader.calmed { background-color: var(--bg-sand); color: var(--clay-dark); }
+    #preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .preloader-top {
+      width: 100%; display: flex; justify-content: space-between; align-items: center;
+      font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.75;
+    }
+    .preloader-center {
+      position: relative; width: min(580px, 92vw); display: flex; flex-direction: column;
+      align-items: center; justify-content: center; padding: 2rem 0;
+    }
+    .PreloaderLogo-title {
+      font-family: var(--font-serif); font-weight: 600; font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+      letter-spacing: 0.28em; padding-left: 0.28em; text-transform: uppercase; line-height: 1; margin-bottom: 0.2rem;
+    }
+    #logo-wave-canvas { width: 100%; height: 80px; display: block; cursor: pointer; }
+    .PreloaderLogo-sub {
+      font-family: var(--font-serif); font-weight: 400; font-size: clamp(0.88rem, 1.6vw, 1.15rem);
+      letter-spacing: 0.55em; padding-left: 0.55em; text-transform: uppercase; margin-top: 0.15rem; opacity: 0.85;
+    }
+    .preloader-bottom {
+      width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;
+    }
+    .preloader-status {
+      display: flex; align-items: center; gap: 0.75rem; font-family: var(--font-mono);
+      font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+    }
+    .status-dot {
+      width: 8px; height: 8px; border-radius: 50%; background-color: var(--ochre);
+      box-shadow: 0 0 12px var(--ochre); animation: pulseDot 1.6s infinite ease-in-out;
+    }
+    @keyframes pulseDot { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.45); opacity: 1; } }
+    .skip-btn {
+      background: transparent; border: 1px solid rgba(244, 239, 230, 0.35); color: inherit;
+      padding: 0.65rem 1.25rem; border-radius: 999px; font-family: var(--font-mono);
+      font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease;
+    }
+    .skip-btn:hover { border-color: var(--ochre); background: rgba(200, 138, 54, 0.15); }
+
+    /* FIO DE PRUMO CONTÍNUO */
+    .plumb-spine {
+      position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+      width: 80px; height: 100vh; pointer-events: none; z-index: 2; opacity: 0.65;
+    }
+    @media (max-width: 960px) { .plumb-spine { left: 16px; transform: none; opacity: 0.38; } }
+
+    /* HEADER FIXO */
+    .site-header {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 900;
+      padding: 1.15rem clamp(1.25rem, 4vw, 3.5rem);
+      transition: background-color 0.4s ease, backdrop-filter 0.4s ease, padding 0.4s ease, border-color 0.4s ease;
+      border-bottom: 1px solid transparent;
+    }
+    .site-header.scrolled {
+      background-color: rgba(244, 239, 230, 0.88); backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px); padding: 0.8rem clamp(1.25rem, 4vw, 3.5rem);
+      border-bottom: 1px solid var(--line-subtle);
+    }
+    .header-inner {
+      max-width: 1440px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1.2rem;
+    }
+    .brand-logo { text-decoration: none; color: var(--clay-dark); display: inline-flex; flex-direction: column; align-items: center; }
+    .brand-logo-main { font-family: var(--font-serif); font-weight: 600; font-size: 1.35rem; letter-spacing: 0.25em; padding-left: 0.25em; line-height: 1; }
+    .brand-logo-line { width: 84%; height: 1.5px; background-color: var(--clay-dark); margin: 4px 0 3px; transition: transform 0.5s var(--ease-out-expo), background-color 0.3s ease; }
+    .brand-logo:hover .brand-logo-line { transform: scaleX(1.14); background-color: var(--terracotta); }
+    .brand-logo-sub { font-family: var(--font-serif); font-size: 0.54rem; letter-spacing: 0.52em; padding-left: 0.52em; line-height: 1; }
+
+    .main-nav { display: flex; align-items: center; gap: clamp(1rem, 2vw, 2.1rem); }
+    .nav-link {
+      text-decoration: none; color: var(--clay-dark); font-size: 0.76rem; font-weight: 500;
+      letter-spacing: 0.13em; text-transform: uppercase; position: relative; padding: 0.3rem 0;
+    }
+    .nav-link::after {
+      content: ''; position: absolute; left: 0; bottom: 0; width: 100%; height: 1px;
+      background-color: var(--terracotta); transform: scaleX(0); transform-origin: right; transition: transform 0.4s var(--ease-out-expo);
+    }
+    .nav-link:hover { color: var(--terracotta); }
+    .nav-link:hover::after { transform: scaleX(1); transform-origin: left; }
+
+    .header-actions { display: flex; align-items: center; gap: 0.55rem; }
+    .btn-student {
+      background: transparent; border: 1px solid var(--line-strong); color: var(--clay-dark);
+      padding: 0.55rem 1.1rem; border-radius: 999px; font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: all 0.35s ease;
+    }
+    .btn-student:hover { background-color: var(--clay-dark); color: var(--bg-sand); }
+    .icon-pill {
+      width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line-subtle);
+      background: rgba(244, 239, 230, 0.6); color: var(--clay-dark); display: inline-flex;
+      align-items: center; justify-content: center; text-decoration: none; cursor: pointer; transition: all 0.3s ease;
+    }
+    .icon-pill:hover { border-color: var(--terracotta); color: var(--terracotta); transform: translateY(-2px); }
+    .sound-pill {
+      display: inline-flex; align-items: center; gap: 0.45rem; padding: 0 0.85rem; height: 36px;
+      border-radius: 999px; border: 1px solid var(--line-subtle); background: rgba(238, 220, 201, 0.45);
+      color: var(--clay-dark); font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em;
+      text-transform: uppercase; cursor: pointer; transition: all 0.3s ease;
+    }
+    .sound-pill.active { border-color: var(--ochre); background: rgba(200, 138, 54, 0.22); color: var(--bordeaux); }
+    .sound-bars { display: inline-flex; align-items: flex-end; gap: 2px; height: 11px; }
+    .sound-bars span { width: 1.5px; background-color: currentColor; height: 3px; }
+    .sound-pill.active .sound-bars span:nth-child(1) { animation: eqBar 0.9s infinite ease-in-out 0.1s; }
+    .sound-pill.active .sound-bars span:nth-child(2) { animation: eqBar 0.9s infinite ease-in-out 0.3s; }
+    .sound-pill.active .sound-bars span:nth-child(3) { animation: eqBar 0.9s infinite ease-in-out 0.2s; }
+    .sound-pill.active .sound-bars span:nth-child(4) { animation: eqBar 0.9s infinite ease-in-out 0.4s; }
+    @keyframes eqBar { 0%, 100% { height: 3px; } 50% { height: 11px; } }
+
+    .mobile-menu-toggle {
+      display: none; background: transparent; border: 1px solid var(--line-strong); border-radius: 999px;
+      padding: 0.5rem 0.95rem; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--clay-dark); cursor: pointer;
+    }
+    @media (max-width: 1080px) {
+      .main-nav, .btn-student { display: none; }
+      .mobile-menu-toggle { display: inline-flex; align-items: center; }
+    }
+    .mobile-nav-overlay {
+      position: fixed; inset: 0; background-color: var(--bg-sand); z-index: 890;
+      padding: 6rem 2rem 2.5rem; display: flex; flex-direction: column; justify-content: space-between;
+      opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s;
+    }
+    .mobile-nav-overlay.open { opacity: 1; visibility: visible; }
+    .mobile-nav-links { display: flex; flex-direction: column; gap: 1.1rem; }
+    .mobile-nav-links a {
+      font-family: var(--font-serif); font-size: clamp(1.8rem, 6vw, 2.6rem); color: var(--clay-dark);
+      text-decoration: none; border-bottom: 1px solid var(--line-subtle); padding-bottom: 0.5rem;
+      display: flex; justify-content: space-between; align-items: baseline;
+    }
+    .mobile-nav-links a span { font-family: var(--font-mono); font-size: 0.75rem; color: var(--terracotta); }
+
+    /* COMPONENTES GERAIS */
+    main { position: relative; z-index: 5; }
+    .container { width: 100%; max-width: 1360px; margin: 0 auto; padding: 0 clamp(1.25rem, 4.5vw, 4rem); }
+    .section-tag {
+      display: inline-flex; align-items: center; gap: 0.65rem; font-family: var(--font-mono);
+      font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 1.2rem;
+    }
+    .section-tag::before { content: ''; width: 24px; height: 1px; background-color: var(--terracotta); }
+    .editorial-title {
+      font-family: var(--font-serif); font-weight: 400; font-size: clamp(2.25rem, 4.6vw, 4.2rem);
+      line-height: 1.08; letter-spacing: -0.01em; color: var(--clay-dark);
+    }
+    .editorial-title em { font-style: italic; color: var(--bordeaux); font-weight: 400; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.8rem; background-color: var(--clay-dark);
+      color: var(--bg-sand); padding: 0.95rem 1.9rem; border-radius: 999px; font-size: 0.76rem;
+      font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none;
+      border: 1px solid var(--clay-dark); cursor: pointer; transition: all 0.35s ease;
+    }
+    .btn-primary:hover { background-color: var(--bordeaux); border-color: var(--bordeaux); transform: translateY(-2px); }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 0.75rem; background-color: transparent;
+      color: var(--clay-dark); padding: 0.9rem 1.8rem; border-radius: 999px; font-size: 0.76rem;
+      font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none;
+      border: 1px solid var(--line-strong); cursor: pointer; transition: all 0.35s ease;
+    }
+    .btn-outline:hover { border-color: var(--terracotta); color: var(--terracotta); background-color: rgba(182, 89, 56, 0.06); }
+
+    .reveal-up { opacity: 0; transform: translateY(26px); transition: opacity 0.85s var(--ease-out-expo), transform 0.85s var(--ease-out-expo); }
+    .reveal-up.is-visible { opacity: 1; transform: translateY(0); }
+
+    /* SEÇÃO 1: HERO */
+    .hero-section {
+      min-height: 100vh; padding: 8.2rem 0 3rem; display: flex; flex-direction: column;
+      justify-content: space-between; position: relative; overflow: hidden;
+    }
+    .aura-blob { position: absolute; border-radius: 50%; filter: blur(85px); pointer-events: none; z-index: -1; opacity: 0.58; }
+    .aura-1 { width: 450px; height: 450px; background: radial-gradient(circle, var(--pastel-peach), transparent 70%); top: 10%; left: 6%; }
+    .aura-2 { width: 500px; height: 500px; background: radial-gradient(circle, var(--pastel-sage), transparent 70%); bottom: 8%; right: 5%; }
+    .aura-3 { width: 320px; height: 320px; background: radial-gradient(circle, rgba(200, 138, 54, 0.22), transparent 70%); top: 38%; left: 42%; }
+    .hero-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: clamp(2rem, 5vw, 5rem); align-items: center; margin: auto 0; padding: 1.5rem 0; }
+    @media (max-width: 960px) { .hero-grid { grid-template-columns: 1fr; } }
+    .hero-kicker {
+      font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--clay-muted); margin-bottom: 1.3rem; display: flex; align-items: center; gap: 0.7rem;
+    }
+    .hero-kicker span.dot { width: 6px; height: 6px; border-radius: 50%; background-color: var(--terracotta); }
+    .hero-headline {
+      font-family: var(--font-serif); font-weight: 400; font-size: clamp(2.9rem, 6vw, 5.5rem);
+      line-height: 1.02; letter-spacing: -0.015em; color: var(--clay-dark); margin-bottom: 1.5rem;
+    }
+    .hero-headline .storm-word { font-style: italic; color: var(--bordeaux); display: inline-block; }
+    .hero-sub { font-family: var(--font-serif); font-style: italic; font-size: clamp(1.2rem, 2vw, 1.5rem); color: var(--clay-soft); max-width: 540px; margin-bottom: 2.2rem; line-height: 1.5; }
+    .hero-cta-group { display: flex; align-items: center; gap: 1.1rem; flex-wrap: wrap; }
+    .hero-sculpture-card {
+      position: relative; background: linear-gradient(160deg, rgba(239, 232, 220, 0.88), rgba(220, 227, 216, 0.42));
+      border: 1px solid var(--line-strong); border-radius: 220px 220px 24px 24px; padding: 2.4rem 1.8rem 1.6rem;
+      display: flex; flex-direction: column; align-items: center; justify-content: space-between; min-height: 460px;
+    }
+    .sculpture-svg { width: 100%; max-width: 310px; height: 280px; overflow: visible; }
+    .breathing-figure-path { fill: none; stroke: var(--clay-dark); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .breathing-horizon-path { fill: none; stroke: var(--ochre); stroke-width: 2.2; stroke-linecap: round; }
+    .sculpture-caption {
+      width: 100%; border-top: 1px solid var(--line-subtle); padding-top: 0.9rem; display: flex;
+      justify-content: space-between; font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.13em; color: var(--clay-muted);
+    }
+    .hero-bottom-bar {
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; border-top: 1px solid var(--line-subtle);
+      padding-top: 1.15rem; font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--clay-muted);
+    }
+
+    /* SEÇÃO 2: MANIFESTO & FISIOLOGIA */
+    .manifesto-section { padding: clamp(4.5rem, 9vw, 8.5rem) 0; border-top: 1px solid var(--line-subtle); }
+    .manifesto-intro { max-width: 880px; margin-bottom: 3.5rem; }
+    .manifesto-lead { font-family: var(--font-serif); font-size: clamp(1.5rem, 2.8vw, 2.3rem); line-height: 1.32; color: var(--clay-dark); margin-top: 1.3rem; }
+    .manifesto-lead span.highlight { color: var(--terracotta); font-style: italic; }
+    .physiology-interactive {
+      background-color: var(--bg-sand-deep); border: 1px solid var(--line-subtle); border-radius: 24px;
+      padding: clamp(1.5rem, 3.5vw, 3rem); margin-bottom: 4.5rem;
+    }
+    .physio-header {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.2rem;
+      margin-bottom: 2rem; border-bottom: 1px solid var(--line-subtle); padding-bottom: 1.3rem;
+    }
+    .state-switcher { display: inline-flex; background-color: var(--bg-sand); padding: 0.3rem; border-radius: 999px; border: 1px solid var(--line-subtle); flex-wrap: wrap; }
+    .state-btn {
+      background: transparent; border: none; padding: 0.55rem 1.15rem; border-radius: 999px;
+      font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.11em; text-transform: uppercase;
+      color: var(--clay-muted); cursor: pointer; transition: all 0.3s ease;
+    }
+    .state-btn.active { background-color: var(--clay-dark); color: var(--bg-sand); }
+    .physio-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+    @media (max-width: 960px) { .physio-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .physio-grid { grid-template-columns: 1fr; } }
+    .physio-card { background-color: var(--bg-sand); border: 1px solid var(--line-subtle); border-radius: 16px; padding: 1.5rem; transition: transform 0.35s ease; }
+    .physio-card:hover { transform: translateY(-4px); border-color: var(--ochre); }
+    .physio-metric { font-family: var(--font-serif); font-size: 2.1rem; color: var(--bordeaux); line-height: 1; margin-bottom: 0.45rem; }
+    .physio-title { font-weight: 600; font-size: 0.94rem; margin-bottom: 0.4rem; color: var(--clay-dark); }
+    .physio-desc { font-size: 0.85rem; color: var(--clay-soft); line-height: 1.55; }
+
+    /* PROFESSORA COSTURADA NA NARRATIVA */
+    .teacher-editorial-weave { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(2rem, 5vw, 4.2rem); align-items: center; }
+    @media (max-width: 900px) { .teacher-editorial-weave { grid-template-columns: 1fr; } }
+    .teacher-portrait-frame {
+      position: relative; border-radius: 180px 180px 20px 20px; overflow: hidden;
+      aspect-ratio: 4 / 4.6; border: 1px solid var(--line-strong); background-color: var(--bg-sand-deep);
+    }
+    .teacher-portrait-frame img { width: 100%; height: 100%; object-fit: cover; filter: sepia(14%) contrast(98%); }
+    .teacher-badge-floating {
+      position: absolute; bottom: 1.1rem; left: 1.1rem; right: 1.1rem; background: rgba(244, 239, 230, 0.92);
+      backdrop-filter: blur(10px); padding: 0.8rem 1.1rem; border-radius: 12px; border: 1px solid var(--line-subtle);
+      display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.11em; text-transform: uppercase;
+    }
+    .teacher-quote { font-family: var(--font-serif); font-style: italic; font-size: clamp(1.4rem, 2.3vw, 2rem); line-height: 1.35; margin-bottom: 1.3rem; }
+    .teacher-bio-text { color: var(--clay-soft); font-size: 0.96rem; margin-bottom: 1.1rem; max-width: 600px; }
+    .pillar-pills { display: flex; flex-wrap: wrap; gap: 0.55rem; margin: 1.5rem 0 2rem; }
+    .pillar-pill { padding: 0.4rem 0.95rem; border-radius: 999px; background-color: var(--pastel-sage); color: var(--clay-dark); font-size: 0.76rem; font-weight: 500; }
+
+    /* SEÇÃO 3: EXPERIMENTE AQUI */
+    .experience-section {
+      padding: clamp(4.5rem, 8.5vw, 7.5rem) 0;
+      background: linear-gradient(180deg, var(--bg-sand) 0%, var(--bg-sand-deep) 50%, var(--bg-sand) 100%);
+      border-top: 1px solid var(--line-subtle);
+    }
+    .experience-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1.8rem; margin-bottom: 3rem; }
+    .diptych-card {
+      display: grid; grid-template-columns: 1.2fr 0.8fr; background-color: var(--bg-sand);
+      border: 1px solid var(--line-strong); border-radius: 26px; overflow: hidden; box-shadow: 0 24px 50px rgba(35, 23, 18, 0.05);
+    }
+    @media (max-width: 960px) { .diptych-card { grid-template-columns: 1fr; } }
+    .diptych-video-side { padding: clamp(1.6rem, 3.8vw, 3rem); border-right: 1px solid var(--line-subtle); display: flex; flex-direction: column; justify-content: space-between; }
+    @media (max-width: 960px) { .diptych-video-side { border-right: none; border-bottom: 1px solid var(--line-subtle); } }
+    .video-preview-box { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 16 / 9; background-color: var(--clay-dark); margin: 1.4rem 0; cursor: pointer; }
+    .video-preview-box img { width: 100%; height: 100%; object-fit: cover; opacity: 0.78; filter: sepia(16%); transition: transform 0.8s ease; }
+    .video-preview-box:hover img { transform: scale(1.04); }
+    .play-trigger-overlay {
+      position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: var(--bg-sand); background: radial-gradient(circle, rgba(35, 23, 18, 0.2), rgba(35, 23, 18, 0.65)); text-align: center; padding: 1rem;
+    }
+    .play-circle {
+      width: 68px; height: 68px; border-radius: 50%; background: rgba(244, 239, 230, 0.95); color: var(--bordeaux);
+      display: flex; align-items: center; justify-content: center; margin-bottom: 0.75rem; transition: transform 0.35s ease;
+    }
+    .video-preview-box:hover .play-circle { transform: scale(1.1); background-color: var(--ochre); color: var(--bg-sand); }
+    .diptych-pdf-side {
+      padding: clamp(1.6rem, 3.8vw, 3rem); background: linear-gradient(165deg, rgba(240, 220, 208, 0.38), rgba(244, 239, 230, 0.9));
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .pdf-mockup { background-color: var(--bg-sand); border: 1px solid var(--line-strong); border-radius: 14px; padding: 1.5rem; margin: 1.4rem 0; }
+    .pdf-mockup-header {
+      display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.64rem;
+      letter-spacing: 0.15em; text-transform: uppercase; color: var(--terracotta); border-bottom: 1px solid var(--line-subtle); padding-bottom: 0.65rem; margin-bottom: 0.9rem;
+    }
+    .pdf-mockup-title { font-family: var(--font-serif); font-size: 1.4rem; line-height: 1.2; margin-bottom: 0.5rem; }
+    .pdf-chapters { list-style: none; margin-top: 0.9rem; font-size: 0.83rem; color: var(--clay-soft); }
+    .pdf-chapters li { padding: 0.38rem 0; border-top: 1px dashed var(--line-subtle); display: flex; justify-content: space-between; }
+
+    /* SEÇÃO 4: AULAS & HORÁRIOS */
+    .classes-section { padding: clamp(4.5rem, 9vw, 8.5rem) 0; border-top: 1px solid var(--line-subtle); }
+    .modality-tabs { display: flex; gap: 0.7rem; flex-wrap: wrap; margin: 2.2rem 0; border-bottom: 1px solid var(--line-subtle); padding-bottom: 1.4rem; }
+    .modality-tab {
+      background: transparent; border: 1px solid var(--line-strong); color: var(--clay-dark); padding: 0.8rem 1.5rem;
+      border-radius: 999px; font-family: var(--font-sans); font-size: 0.78rem; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease;
+    }
+    .modality-tab.active { background-color: var(--bordeaux); border-color: var(--bordeaux); color: var(--bg-sand); }
+    .modality-content-wrapper { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(1.8rem, 4vw, 3.8rem); align-items: start; }
+    @media (max-width: 960px) { .modality-content-wrapper { grid-template-columns: 1fr; } }
+    .modality-info-card { background-color: var(--bg-sand-card); border: 1px solid var(--line-subtle); border-radius: 22px; padding: 2.2rem; }
+    .schedule-list { display: flex; flex-direction: column; gap: 0.95rem; }
+    .schedule-item {
+      background-color: var(--bg-sand); border: 1px solid var(--line-subtle); border-radius: 16px; padding: 1.25rem 1.5rem;
+      display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; transition: border-color 0.3s ease, transform 0.3s ease;
+    }
+    .schedule-item:hover { border-color: var(--terracotta); transform: translateX(4px); }
+    .schedule-day { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 0.2rem; }
+    .schedule-title { font-family: var(--font-serif); font-size: 1.3rem; color: var(--clay-dark); }
+    .schedule-meta { font-size: 0.83rem; color: var(--clay-muted); }
+    .schedule-book-btn {
+      padding: 0.6rem 1.2rem; border-radius: 999px; background-color: transparent; border: 1px solid var(--line-strong);
+      color: var(--clay-dark); font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.12em;
+      text-transform: uppercase; text-decoration: none; cursor: pointer; transition: all 0.3s ease; white-space: nowrap;
+    }
+    .schedule-item:hover .schedule-book-btn { background-color: var(--clay-dark); color: var(--bg-sand); }
+    .sensory-strip {
+      margin-top: 3.5rem; padding: 2rem 2.2rem; border-radius: 20px;
+      background: linear-gradient(90deg, rgba(220, 227, 216, 0.55), rgba(240, 220, 208, 0.55));
+      border: 1px solid var(--line-subtle); display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.8rem;
+    }
+    @media (max-width: 820px) { .sensory-strip { grid-template-columns: 1fr; } }
+
+    /* SEÇÃO 5: VIVÊNCIAS */
+    .retreats-section { padding: clamp(4.5rem, 9vw, 8.5rem) 0; border-top: 1px solid var(--line-subtle); }
+    .upcoming-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.8rem; margin: 2.8rem 0 4.5rem; }
+    @media (max-width: 860px) { .upcoming-grid { grid-template-columns: 1fr; } }
+    .retreat-card {
+      background-color: var(--bg-sand-card); border: 1px solid var(--line-strong); border-radius: 22px;
+      padding: 2.1rem; display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .retreat-date-badge {
+      display: inline-flex; align-items: baseline; gap: 0.6rem; font-family: var(--font-serif);
+      font-size: 2.2rem; color: var(--bordeaux); line-height: 1; margin-bottom: 0.9rem; flex-wrap: wrap;
+    }
+    .retreat-date-badge span { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--clay-muted); }
+    .memories-box { border-top: 1px solid var(--line-subtle); padding-top: 3.5rem; }
+    .memories-carousel { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; margin-top: 2.2rem; }
+    @media (max-width: 860px) { .memories-carousel { grid-template-columns: 1fr; } }
+    .memory-card { background-color: var(--bg-sand); border: 1px solid var(--line-subtle); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; }
+    .memory-img-wrap { aspect-ratio: 4 / 3; overflow: hidden; }
+    .memory-img-wrap img { width: 100%; height: 100%; object-fit: cover; filter: sepia(12%); transition: transform 0.7s ease; }
+    .memory-card:hover .memory-img-wrap img { transform: scale(1.05); }
+    .memory-body { padding: 1.4rem; display: flex; flex-direction: column; justify-content: space-between; flex: 1; }
+
+    /* SEÇÃO 6: LOJINHA TEASER */
+    .shop-teaser-section { padding: clamp(4rem, 8vw, 6.5rem) 0; border-top: 1px solid var(--line-subtle); }
+    .shop-editorial-banner {
+      background: linear-gradient(135deg, var(--clay-dark) 0%, #33221B 100%); color: var(--bg-sand);
+      border-radius: 26px; padding: clamp(2rem, 4.5vw, 4rem); display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2.5rem; align-items: center;
+    }
+    @media (max-width: 920px) { .shop-editorial-banner { grid-template-columns: 1fr; } }
+    .shop-items-preview { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.95rem; }
+    @media (max-width: 520px) { .shop-items-preview { grid-template-columns: 1fr; } }
+    .shop-mini-item { background: rgba(244, 239, 230, 0.06); border: 1px solid rgba(244, 239, 230, 0.14); border-radius: 16px; padding: 1.25rem; }
+    .shop-mini-item h4 { font-family: var(--font-serif); font-size: 1.18rem; font-weight: 400; margin: 0.35rem 0 0.2rem; color: var(--bg-sand); }
+    .waitlist-form { display: flex; gap: 0.7rem; margin-top: 1.8rem; flex-wrap: wrap; }
+    .waitlist-input {
+      flex: 1; min-width: 220px; background: rgba(244, 239, 230, 0.08); border: 1px solid rgba(244, 239, 230, 0.25);
+      color: var(--bg-sand); padding: 0.9rem 1.3rem; border-radius: 999px; font-family: var(--font-sans); font-size: 0.86rem; outline: none;
+    }
+    .waitlist-input::placeholder { color: rgba(244, 239, 230, 0.5); }
+    .waitlist-btn {
+      background-color: var(--ochre); color: var(--clay-dark); border: none; padding: 0.9rem 1.7rem;
+      border-radius: 999px; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.13em; text-transform: uppercase; cursor: pointer;
+    }
+
+    /* SEÇÃO 7: FOOTER */
+    .site-footer { padding: 4.5rem 0 2.5rem; border-top: 1px solid var(--line-strong); background-color: var(--bg-sand-deep); position: relative; z-index: 5; }
+    .footer-top { display: grid; grid-template-columns: 1.2fr 0.8fr 0.8fr; gap: 2.5rem; padding-bottom: 3.5rem; border-bottom: 1px solid var(--line-subtle); }
+    @media (max-width: 860px) { .footer-top { grid-template-columns: 1fr; } }
+    .footer-bottom {
+      padding-top: 1.8rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+      font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--clay-muted);
+    }
+
+    /* MODAIS */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(35, 23, 18, 0.76); backdrop-filter: blur(10px);
+      z-index: 9800; display: flex; align-items: center; justify-content: center; padding: 1.25rem;
+      opacity: 0; visibility: hidden; transition: opacity 0.35s ease, visibility 0.35s;
+    }
+    .modal-backdrop.active { opacity: 1; visibility: visible; }
+    .modal-window {
+      background-color: var(--bg-sand); color: var(--clay-dark); border: 1px solid var(--line-strong);
+      border-radius: 24px; max-width: 680px; width: 100%; padding: clamp(1.6rem, 3.8vw, 2.8rem); position: relative;
+    }
+    .modal-close {
+      position: absolute; top: 1.1rem; right: 1.1rem; width: 38px; height: 38px; border-radius: 50%;
+      border: 1px solid var(--line-strong); background: transparent; color: var(--clay-dark); cursor: pointer;
+    }
+    .breath-circle-trainer {
+      width: 155px; height: 155px; border-radius: 50%; margin: 1.8rem auto; border: 1.5px solid var(--terracotta);
+      background: radial-gradient(circle, var(--pastel-peach), transparent 70%); display: flex;
+      align-items: center; justify-content: center; font-family: var(--font-serif); font-style: italic;
+      font-size: 1.2rem; color: var(--bordeaux); animation: breathTrainer 8s infinite ease-in-out;
+    }
+    @keyframes breathTrainer { 0%, 100% { transform: scale(0.82); opacity: 0.7; } 50% { transform: scale(1.22); opacity: 1; } }
+  </style>
+</head>
+<body>
+
+  <div class="film-grain" aria-hidden="true"></div>
+  <canvas id="sensory-canvas" aria-hidden="true"></canvas>
+  <div class="whisper-layer" id="whisper-layer" aria-hidden="true"></div>
+
+  <!-- ATO 0: ABERTURA INTERATIVA — "A CORDA VIVA DA LOGO BONANÇA" -->
+  <div id="preloader" role="dialog" aria-label="Abertura interativa Bonança Yoga">
+    <div class="preloader-top">
+      <span>BONANÇA • YOGA INTEGRAL</span>
+      <span id="wave-coherence-label">TURBULÊNCIA: 84%</span>
+    </div>
+    <div class="preloader-center">
+      <div class="PreloaderLogo-title">BONANÇA</div>
+      <canvas id="logo-wave-canvas" width="600" height="80"></canvas>
+      <div class="PreloaderLogo-sub">YOGA</div>
+    </div>
+    <div class="preloader-bottom">
+      <div class="preloader-status">
+        <span class="status-dot"></span>
+        <span id="preloader-instruction">MOVA O CURSOR OU TOQUE NA LINHA PARA ACALMAR O HORIZONTE</span>
+      </div>
+      <button class="skip-btn" id="skip-preloader-btn" type="button">ABRIR DIRETO →</button>
+    </div>
+  </div>
+
+  <!-- FIO DE PRUMO CONTÍNUO -->
+  <svg class="plumb-spine" viewBox="0 0 80 1000" preserveAspectRatio="none" aria-hidden="true">
+    <path id="plumb-path" d="M 40 0 Q 40 500 40 1000" fill="none" stroke="#C88A36" stroke-width="1.3" stroke-dasharray="5 7" />
+    <circle id="plumb-weight" cx="40" cy="180" r="4.5" fill="#B65938" />
+  </svg>
+
+  <!-- HEADER FIXO -->
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <a href="#top" class="brand-logo" aria-label="Bonança Yoga - Início">
+        <span class="brand-logo-main">BONANÇA</span>
+        <span class="brand-logo-line"></span>
+        <span class="brand-logo-sub">YOGA</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Navegação Principal">
+        <a href="#o-yoga" class="nav-link">O Yoga</a>
+        <a href="#experimente" class="nav-link">Experimente Aqui</a>
+        <a href="#aulas" class="nav-link">Aulas</a>
+        <a href="#vivencias" class="nav-link">Vivências</a>
+        <a href="#loja" class="nav-link">Loja</a>
+        <a href="#contato" class="nav-link">Contato</a>
+      </nav>
+
+      <div class="header-actions">
+        <button type="button" class="btn-student" onclick="openModal('student-modal')">Área do Aluno</button>
+        <a href="https://instagram.com" target="_blank" rel="noopener" class="icon-pill" title="Instagram Bonança Yoga" aria-label="Instagram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+        </a>
+        <a href="https://open.spotify.com" target="_blank" rel="noopener" class="icon-pill" title="Playlist Spotify" aria-label="Spotify">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14.5c2.5-1 5.5-1 8 0"></path><path d="M7 11.5c3.2-1.2 6.8-1.2 10 0"></path><path d="M9 17.5c1.8-.6 4.2-.6 6 0"></path></svg>
+        </a>
+        <button type="button" class="sound-pill" id="sound-toggle-btn" aria-label="Ativar frequência sonora">
+          <span class="sound-bars" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+          <span id="sound-label">Som</span>
+        </button>
+        <button type="button" class="mobile-menu-toggle" id="mobile-menu-btn">Menu</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-nav-overlay" id="mobile-nav-overlay">
+    <div class="mobile-nav-links">
+      <a href="#o-yoga" class="mobile-link">O Yoga & Benefícios <span>01</span></a>
+      <a href="#experimente" class="mobile-link">Experimente Aqui <span>02</span></a>
+      <a href="#aulas" class="mobile-link">Aulas & Horários <span>03</span></a>
+      <a href="#vivencias" class="mobile-link">Vivências & Memórias <span>04</span></a>
+      <a href="#loja" class="mobile-link">Curadoria Bonança <span>05</span></a>
+      <a href="#contato" class="mobile-link">Contato <span>06</span></a>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+      <button type="button" class="btn-primary" onclick="closeMobileMenu(); openModal('student-modal');">Acessar Área do Aluno</button>
+      <p style="font-family:var(--font-mono); font-size:0.7rem; color:var(--clay-muted);">BONANÇA YOGA INTEGRAL</p>
+    </div>
+  </div>
+
+  <main id="top">
+    <!-- SEÇÃO 1: HERO -->
+    <section class="hero-section">
+      <div class="aura-blob aura-1"></div>
+      <div class="aura-blob aura-2"></div>
+      <div class="aura-blob aura-3"></div>
+
+      <div class="container hero-grid">
+        <div class="hero-copy reveal-up is-visible">
+          <div class="hero-kicker"><span class="dot"></span><span>CADERNO DE MARÉS • PRÁTICA & PRESENÇA</span></div>
+          <h1 class="hero-headline">A bonança depois da <span class="storm-word">tempestade.</span></h1>
+          <p class="hero-sub">Bonança | Yoga Integral — Onde o corpo ganha espaço, a respiração encontra prumo e a mente descansa na própria âncora.</p>
+          <div class="hero-cta-group">
+            <a href="#o-yoga" class="btn-primary"><span>Comece por aqui</span></a>
+            <a href="#experimente" class="btn-outline">Prática gratuita de 15 min</a>
+          </div>
+        </div>
+
+        <div class="hero-sculpture-card reveal-up is-visible" id="sculpture-card">
+          <div style="width:100%; display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:0.65rem; letter-spacing:0.14em; color:var(--clay-muted);">
+            <span>FIG. 01 — EIXO DE GRAVIDADE</span>
+            <span id="posture-state-text">EM EQUILÍBRIO</span>
+          </div>
+          <svg class="sculpture-svg" viewBox="0 0 300 280" aria-label="Traço contínuo minimalista representando presença corporal">
+            <circle id="hero-breath-halo" cx="150" cy="135" r="76" fill="none" stroke="rgba(200, 138, 54, 0.28)" stroke-width="1.2" />
+            <path id="hero-horizon-line" class="breathing-horizon-path" d="M 25 215 Q 150 215 275 215" />
+            <path id="hero-figure-line" class="breathing-figure-path" d="M 85 215 C 95 215, 115 195, 130 165 C 142 140, 135 95, 150 75 C 165 95, 158 140, 170 165 C 185 195, 205 215, 215 215 Z M 150 48 C 158 48, 164 54, 164 62 C 164 70, 158 76, 150 76 C 142 76, 136 70, 136 62 C 136 54, 142 48, 150 48 Z" />
+          </svg>
+          <div class="sculpture-caption">
+            <span>PASSE O CURSOR PARA SENTIR O PRUMO</span>
+            <span>4s INSPIRA • 4s EXPIRA</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="hero-bottom-bar">
+          <span>ROLE PARA SEGUIR O FIO DE PRUMO</span>
+          <span>MOVA O CURSOR PELO ESPAÇO PARA ACALMAR A SUPERFÍCIE</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2: O MANIFESTO DA PAUSA & FISIOLOGIA -->
+    <section class="manifesto-section" id="o-yoga">
+      <div class="container">
+        <div class="manifesto-intro reveal-up">
+          <div class="section-tag">01 • O Manifesto da Pausa</div>
+          <h2 class="editorial-title">Você não precisa ser flexível, nem ter a mente vazia. <em>O Yoga começa exatamente no seu cansaço.</em></h2>
+          <p class="manifesto-lead">
+            Vivemos em estado de alerta contínuo — maxilar travado, respiração curta no alto do peito e pensamentos que não desligam. O <span class="highlight">Yoga Integral</span> não é uma performance acrobática: é a tecnologia ancestral e fisiológica de devolver você ao seu centro de gravidade.
+          </p>
+        </div>
+
+        <div class="physiology-interactive reveal-up">
+          <div class="physio-header">
+            <div>
+              <span style="font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--terracotta);">
+                FISIOLOGIA DA PRÁTICA • TOQUE PARA COMPARAR O EFEITO NO SISTEMA NERVOSO
+              </span>
+              <h3 style="font-family:var(--font-serif); font-size:1.8rem; font-weight:400; margin-top:0.25rem;">
+                O que acontece no seu corpo em uma prática da Bonança:
+              </h3>
+            </div>
+            <div class="state-switcher">
+              <button type="button" class="state-btn" id="btn-state-storm" onclick="setPhysioState('storm')">Antes (Rotina Acelerada)</button>
+              <button type="button" class="state-btn active" id="btn-state-calm" onclick="setPhysioState('calm')">Depois de 15 min (Estado Bonança)</button>
+            </div>
+          </div>
+
+          <div class="physio-grid">
+            <div class="physio-card">
+              <div class="physio-metric" id="metric-1">-38%</div>
+              <div class="physio-title" id="title-1">Queda no Cortisol e Ansiedade</div>
+              <p class="physio-desc" id="desc-1">A expiração prolongada ativa o nervo vago, desligando o modo de "luta ou fuga" e trazendo clareza mental imediata.</p>
+            </div>
+            <div class="physio-card">
+              <div class="physio-metric" id="metric-2">+100%</div>
+              <div class="physio-title" id="title-2">Expansão da Caixa Torácica</div>
+              <p class="physio-desc" id="desc-2">O diafragma destrava, aumentando a oxigenação celular e dissolvendo a sensação de aperto no peito ao fim do dia.</p>
+            </div>
+            <div class="physio-card">
+              <div class="physio-metric" id="metric-3">Eixo</div>
+              <div class="physio-title" id="title-3">Descompressão da Coluna</div>
+              <p class="physio-desc" id="desc-3">Posturas inteligentes criam espaço entre as vértebras, aliviando dores lombares e a tensão acumulada nos ombros.</p>
+            </div>
+            <div class="physio-card">
+              <div class="physio-metric" id="metric-4">REM</div>
+              <div class="physio-title" id="title-4">Sono Profundo e Reparador</div>
+              <p class="physio-desc" id="desc-4">Com o sistema parassimpático regulado, o corpo reaprende a descansar de verdade durante a noite, sem despertar exausto.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="teacher-editorial-weave reveal-up">
+          <div class="teacher-portrait-frame">
+            <img src="https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&w=1000&q=85" alt="Prática de Yoga Integral" loading="lazy" />
+            <div class="teacher-badge-floating">
+              <span>TRAJETÓRIA • 6 ANOS NO YOGA INTEGRAL</span>
+              <span style="color:var(--terracotta);">PRESENÇA REAL</span>
+            </div>
+          </div>
+          <div>
+            <div class="section-tag">Quem guia a sua travessia</div>
+            <blockquote class="teacher-quote">
+              “Meu compromisso ao longo de 6 anos no Yoga Integral nunca foi colocar o seu corpo em uma forma perfeita, mas criar um espaço seguro onde você possa finalmente soltar o ar.”
+            </blockquote>
+            <p class="teacher-bio-text">
+              Sem misticismo inatingível e sem cobranças estéticas. Na Bonança, cada aula é desenhada para pessoas reais que lidam com rotinas intensas. Unimos o rigor técnico do alinhamento postural com a potência da respiração consciente (<em>pranayama</em>), a vibração dos mantras e o acolhimento sensorial.
+            </p>
+            <div class="pillar-pills">
+              <span class="pillar-pill">Alinhamento Postural Consciente</span>
+              <span class="pillar-pill">Pranayamas & Respiração</span>
+              <span class="pillar-pill">Mantras & Vibração Sonora</span>
+              <span class="pillar-pill">Estímulos Sensoriais & Aromas</span>
+            </div>
+            <a href="#experimente" class="btn-primary">Sinta na pele pelos próximos 15 minutos →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 3: EXPERIMENTE AQUI -->
+    <section class="experience-section" id="experimente">
+      <div class="container">
+        <div class="experience-header reveal-up">
+          <div>
+            <div class="section-tag">02 • Experimente Aqui (Acesso Livre)</div>
+            <h2 class="editorial-title">Não acredite apenas nas palavras.<br><em>Faça uma pausa agora mesmo.</em></h2>
+          </div>
+          <p style="max-width: 420px; color: var(--clay-soft); font-size: 0.95rem;">
+            Separamos dois recursos gratuitos para o seu primeiro contato com a Bonança: uma prática guiada curta para fazer hoje e um caderno de apoio em PDF.
+          </p>
+        </div>
+
+        <div class="diptych-card reveal-up">
+          <div class="diptych-video-side">
+            <div>
+              <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.14em; color:var(--terracotta);">
+                <span>RECURSO 01 • VÍDEO & ÁUDIO GUIADO</span>
+                <span>DURAÇÃO: 15 MIN</span>
+              </div>
+              <h3 style="font-family:var(--font-serif); font-size:1.95rem; font-weight:400; margin-top:0.45rem;">Prática de Aterramento & Alívio de Tensões</h3>
+              <div class="video-preview-box" onclick="openModal('practice-modal')">
+                <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1000&q=80" alt="Aula guiada de 15 minutos" loading="lazy" />
+                <div class="play-trigger-overlay">
+                  <div class="play-circle">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="8 5 19 12 8 19 8 5"></polygon></svg>
+                  </div>
+                  <span style="font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.16em;">CLIQUE PARA INICIAR A EXPERIÊNCIA GUIADA</span>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+              <span style="font-size:0.8rem; color:var(--clay-muted);">✦ Acesso imediato e gratuito</span>
+              <button type="button" class="btn-primary" onclick="openModal('practice-modal')">Dar o Play na Aula (15 min)</button>
+            </div>
+          </div>
+
+          <div class="diptych-pdf-side">
+            <div>
+              <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.14em; color:var(--bordeaux);">
+                <span>RECURSO 02 • MATERIAL DE APOIO</span>
+                <span>FORMATO PDF • 12 PÁG.</span>
+              </div>
+              <h3 style="font-family:var(--font-serif); font-size:1.95rem; font-weight:400; margin-top:0.45rem;">Caderno de Respiração & Alinhamento</h3>
+              <div class="pdf-mockup">
+                <div class="pdf-mockup-header"><span>EDIÇÃO AUTORAL BONANÇA</span><span>PDF GRATUITO</span></div>
+                <div class="pdf-mockup-title">O Fio de Prumo Diário: 3 Respirações e 4 Alinhamentos Base</div>
+                <ul class="pdf-chapters">
+                  <li><span>01. A Respiração Quadrada (Sama Vritti)</span> <span>Pág. 03</span></li>
+                  <li><span>02. Como sentar sem sobrecarregar a lombar</span> <span>Pág. 06</span></li>
+                  <li><span>03. Micro-ritual noturno com aromas</span> <span>Pág. 09</span></li>
+                </ul>
+              </div>
+            </div>
+            <button type="button" class="btn-outline" style="width:100%; justify-content:center;" onclick="downloadGuidePDF()">
+              <span>Baixar Guia Prático em PDF ↓</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 4: AULAS, MODALIDADES E HORÁRIOS -->
+    <section class="classes-section" id="aulas">
+      <div class="container">
+        <div class="section-tag reveal-up">03 • Aulas, Modalidades & Grade de Horários</div>
+        <h2 class="editorial-title reveal-up">Escolha o formato que acolhe<br><em>o ritmo da sua rotina.</em></h2>
+
+        <div class="modality-tabs reveal-up">
+          <button type="button" class="modality-tab active" onclick="switchModality('online', this)">01. Online em Grupo (Ao Vivo)</button>
+          <button type="button" class="modality-tab" onclick="switchModality('estudio', this)">02. Presenciais em Estúdio</button>
+          <button type="button" class="modality-tab" onclick="switchModality('particular', this)">03. Particulares Personalizadas</button>
+        </div>
+
+        <div class="modality-content-wrapper reveal-up">
+          <div class="modality-info-card">
+            <span style="font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.15em; color:var(--terracotta);" id="mod-tag">MODALIDADE • ONLINE EM GRUPO</span>
+            <h3 style="font-family:var(--font-serif); font-size:2rem; font-weight:400; margin:0.5rem 0 0.9rem;" id="mod-title">Prática ao vivo com correção real e gravações disponíveis</h3>
+            <p style="color:var(--clay-soft); margin-bottom:1.4rem;" id="mod-desc">Aulas transmitidas ao vivo para que a professora acompanhe suas adaptações posturais em tempo real, mais acesso às gravações na Área do Aluno.</p>
+            <div style="border-top:1px solid var(--line-subtle); padding-top:1.1rem; margin-bottom:1.6rem;" id="mod-highlights">
+              <p style="font-size:0.86rem; margin-bottom:0.35rem;">✦ <strong>Foco:</strong> Mobilidade articular, permanência consciente, pranayamas e relaxamento.</p>
+              <p style="font-size:0.86rem;">✦ <strong>Incluso:</strong> Biblioteca gravada + Playlist da semana.</p>
+            </div>
+            <a href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20aula%20na%20Bonan%C3%A7a%20Yoga." target="_blank" rel="noopener" class="btn-primary">Agendar Aula via WhatsApp →</a>
+          </div>
+          <div class="schedule-list" id="schedule-list"></div>
+        </div>
+
+        <div class="sensory-strip reveal-up">
+          <div>
+            <span style="font-family:var(--font-mono); font-size:0.66rem; letter-spacing:0.14em; color:var(--bordeaux);">01 • AROMATERAPIA BOTÂNICA</span>
+            <h4 style="font-family:var(--font-serif); font-size:1.3rem; margin:0.3rem 0;">Bruma de Lavanda & Cedro</h4>
+            <p style="font-size:0.85rem; color:var(--clay-soft);">Óleos essenciais puros que sinalizam calma imediata ao sistema límbico.</p>
+          </div>
+          <div>
+            <span style="font-family:var(--font-mono); font-size:0.66rem; letter-spacing:0.14em; color:var(--bordeaux);">02 • PAISAGEM SONORA</span>
+            <h4 style="font-family:var(--font-serif); font-size:1.3rem; margin:0.3rem 0;">Mantras & Curadoria Musical</h4>
+            <p style="font-size:0.85rem; color:var(--clay-soft);">Voz, harmônio e playlists orgânicas criadas para sustentar cada transição.</p>
+          </div>
+          <div>
+            <span style="font-family:var(--font-mono); font-size:0.66rem; letter-spacing:0.14em; color:var(--bordeaux);">03 • AJUSTES TÁTEIS</span>
+            <h4 style="font-family:var(--font-serif); font-size:1.3rem; margin:0.3rem 0;">Toque Respeitoso e Técnica</h4>
+            <p style="font-size:0.85rem; color:var(--clay-soft);">6 anos de escuta corporal para adaptar cada postura à sua anatomia única.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 5: VIVÊNCIAS E MEMÓRIAS -->
+    <section class="retreats-section" id="vivencias">
+      <div class="container">
+        <div class="section-tag reveal-up">04 • Vivências & Encontros Presenciais</div>
+        <h2 class="editorial-title reveal-up">Quando a prática transborda do tapete<br><em>para a roda e o afeto.</em></h2>
+
+        <div class="upcoming-grid reveal-up">
+          <article class="retreat-card">
+            <div>
+              <div class="retreat-date-badge">24 MAI <span>• SÁBADO • 08H30 ÀS 12H00</span></div>
+              <h3 style="font-family:var(--font-serif); font-size:1.85rem; font-weight:400; margin-bottom:0.6rem;">Manhã Bonança: Yoga Integral, Pranayama & Café da Manhã Artesanal</h3>
+              <p style="color:var(--clay-soft); font-size:0.92rem; margin-bottom:1.2rem;">Imersão em jardim arborizado com prática sensorial, roda de mantras e mesa posta com pães de fermentação natural, frutas e chás botânicos.</p>
+            </div>
+            <a href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Quero%20reservar%20vaga%20na%20Viv%C3%AAncia%20Manh%C3%A3%20Bonan%C3%A7a." target="_blank" rel="noopener" class="btn-primary" style="align-self:flex-start;">Garantir Inscrição →</a>
+          </article>
+
+          <article class="retreat-card">
+            <div>
+              <div class="retreat-date-badge">21 JUN <span>• SOLSTÍCIO DE INVERNO • 16H00</span></div>
+              <h3 style="font-family:var(--font-serif); font-size:1.85rem; font-weight:400; margin-bottom:0.6rem;">Ritual do Recolhimento: Prática Restaurativa à Luz de Velas & Escalda-pés</h3>
+              <p style="color:var(--clay-soft); font-size:0.92rem; margin-bottom:1.2rem;">Posturas de longa permanência com almofadas, aromaterapia quente de canela e laranja-doce, Yoga Nidra e infusão ayurvédica.</p>
+            </div>
+            <a href="https://wa.me/5511999999999?text=Ol%C3%A1!%20Quero%20informa%C3%A7%C3%B5es%20sobre%20a%20Viv%C3%AAncia%20de%20Inverno." target="_blank" rel="noopener" class="btn-outline" style="align-self:flex-start;">Entrar na Lista Prioritária →</a>
+          </article>
+        </div>
+
+        <div class="memories-box reveal-up">
+          <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:1.2rem;">
+            <div>
+              <span style="font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.16em; color:var(--terracotta);">MEMÓRIAS BONANÇA • ACERVO DE ENCONTROS PASSADOS</span>
+              <h3 style="font-family:var(--font-serif); font-size:2rem; font-weight:400; margin-top:0.3rem;">Participou de uma edição anterior? Baixe os registros do encontro.</h3>
+            </div>
+            <button type="button" class="btn-outline" onclick="openModal('photos-modal')">Acessar Todos os Álbuns</button>
+          </div>
+
+          <div class="memories-carousel">
+            <div class="memory-card">
+              <div class="memory-img-wrap"><img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80" alt="Yoga e Café da Manhã" loading="lazy" /></div>
+              <div class="memory-body">
+                <div><span style="font-family:var(--font-mono); font-size:0.66rem; color:var(--clay-muted);">EDIÇÃO MARÇO • 48 FOTOS</span><h4 style="font-family:var(--font-serif); font-size:1.35rem; margin:0.25rem 0 0.6rem;">Yoga & Café da Manhã na Varanda</h4></div>
+                <button type="button" class="schedule-book-btn" style="width:100%;" onclick="openModal('photos-modal')">Baixar Fotos ↓</button>
+              </div>
+            </div>
+            <div class="memory-card">
+              <div class="memory-img-wrap"><img src="https://images.unsplash.com/photo-1599447421416-3414500d18a5?auto=format&fit=crop&w=800&q=80" alt="Imersão Pranayama" loading="lazy" /></div>
+              <div class="memory-body">
+                <div><span style="font-family:var(--font-mono); font-size:0.66rem; color:var(--clay-muted);">EDIÇÃO JANEIRO • 62 FOTOS</span><h4 style="font-family:var(--font-serif); font-size:1.35rem; margin:0.25rem 0 0.6rem;">Imersão Travessia: Pranayama & Som</h4></div>
+                <button type="button" class="schedule-book-btn" style="width:100%;" onclick="openModal('photos-modal')">Baixar Fotos ↓</button>
+              </div>
+            </div>
+            <div class="memory-card">
+              <div class="memory-img-wrap"><img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80" alt="Roda de Mantras" loading="lazy" /></div>
+              <div class="memory-body">
+                <div><span style="font-family:var(--font-mono); font-size:0.66rem; color:var(--clay-muted);">EDIÇÃO DEZEMBRO • 54 FOTOS</span><h4 style="font-family:var(--font-serif); font-size:1.35rem; margin:0.25rem 0 0.6rem;">Roda de Mantras & Encerramento</h4></div>
+                <button type="button" class="schedule-book-btn" style="width:100%;" onclick="openModal('photos-modal')">Baixar Fotos ↓</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 6: LOJINHA BONANÇA -->
+    <section class="shop-teaser-section" id="loja">
+      <div class="container">
+        <div class="shop-editorial-banner reveal-up">
+          <div>
+            <div class="section-tag" style="color:var(--ochre);">05 • Em Breve: Curadoria Bonança</div>
+            <h2 class="editorial-title" style="color:var(--bg-sand); font-size:clamp(1.9rem, 3.8vw, 3.1rem); margin-bottom:0.9rem;">Objetos de ritual para levar a atmosfera da aula para o seu quarto.</h2>
+            <p style="color:rgba(244,239,230,0.8); max-width:500px; font-size:0.94rem;">Linha autoral em pequenos lotes integrada à Área do Aluno. Deixe seu contato para receber o aviso de lançamento:</p>
+            <form class="waitlist-form" onsubmit="handleWaitlistSubmit(event)">
+              <input type="text" class="waitlist-input" placeholder="Seu e-mail ou WhatsApp..." required />
+              <button type="submit" class="waitlist-btn" id="waitlist-submit-btn">Avise-me quando lançar</button>
+            </form>
+          </div>
+          <div class="shop-items-preview">
+            <div class="shop-mini-item"><span style="font-family:var(--font-mono); font-size:0.64rem; color:var(--ochre);">LOTE 01 • BOTÂNICO</span><h4>Spray de Lavanda & Olíbano</h4><p style="font-size:0.78rem; color:rgba(244,239,230,0.7);">Bruma calmante para tapete e travesseiro.</p></div>
+            <div class="shop-mini-item"><span style="font-family:var(--font-mono); font-size:0.64rem; color:var(--ochre);">LOTE 01 • TÁTIL</span><h4>Almofada de Olhos em Linho</h4><p style="font-size:0.78rem; color:rgba(244,239,230,0.7);">Sementes orgânicas e camomila.</p></div>
+            <div class="shop-mini-item"><span style="font-family:var(--font-mono); font-size:0.64rem; color:var(--ochre);">LOTE 01 • PRÁTICA</span><h4>Tapete Fibra Natural & Cortiça</h4><p style="font-size:0.78rem; color:rgba(244,239,230,0.7);">Aderência firme e toque orgânico.</p></div>
+            <div class="shop-mini-item"><span style="font-family:var(--font-mono); font-size:0.64rem; color:var(--ochre);">ÁREA DO ALUNO</span><h4>Kits de Imersão em Casa</h4><p style="font-size:0.78rem; color:rgba(244,239,230,0.7);">Integrados às jornadas online.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" id="contato">
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <a href="#top" class="brand-logo" style="align-items:flex-start; margin-bottom:1.1rem;">
+            <span class="brand-logo-main" style="padding-left:0;">BONANÇA</span>
+            <span class="brand-logo-line" style="width:100%;"></span>
+            <span class="brand-logo-sub" style="padding-left:0.25em;">YOGA</span>
+          </a>
+          <p style="color:var(--clay-soft); max-width:360px; margin-bottom:1.4rem; font-size:0.92rem;">Yoga Integral com profundidade, técnica e calor humano. A transição da turbulência para o seu centro de gravidade.</p>
+          <a href="https://wa.me/5511999999999" target="_blank" rel="noopener" class="btn-primary">Falar Direto no WhatsApp →</a>
+        </div>
+        <div>
+          <h4 style="font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--terracotta); margin-bottom:1rem;">Navegação</h4>
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:0.6rem; font-size:0.9rem;">
+            <li><a href="#o-yoga" style="color:var(--clay-dark); text-decoration:none;">O Manifesto & Benefícios</a></li>
+            <li><a href="#experimente" style="color:var(--clay-dark); text-decoration:none;">Experimente Aqui (15 min + PDF)</a></li>
+            <li><a href="#aulas" style="color:var(--clay-dark); text-decoration:none;">Modalidades & Horários</a></li>
+            <li><a href="#vivencias" style="color:var(--clay-dark); text-decoration:none;">Vivências & Memórias</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--terracotta); margin-bottom:1rem;">Atmosfera</h4>
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:0.6rem; font-size:0.9rem;">
+            <li><a href="https://instagram.com" target="_blank" rel="noopener" style="color:var(--clay-dark); text-decoration:none;">Instagram (@bonancayoga) ↗</a></li>
+            <li><a href="https://open.spotify.com" target="_blank" rel="noopener" style="color:var(--clay-dark); text-decoration:none;">Playlist Oficial no Spotify ↗</a></li>
+            <li><a href="#top" onclick="openModal('student-modal'); return false;" style="color:var(--clay-dark); text-decoration:none;">Portal Área do Aluno →</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 BONANÇA YOGA INTEGRAL • TODOS OS DIREITOS RESERVADOS</span>
+        <a href="#top" style="color:var(--clay-dark); text-decoration:none;">VOLTAR AO TOPO ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAIS -->
+  <div class="modal-backdrop" id="practice-modal">
+    <div class="modal-window">
+      <button type="button" class="modal-close" onclick="closeModal('practice-modal')">✕</button>
+      <span style="font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.15em; color:var(--terracotta);">SESSÃO EXPERIMENTAL • 15 MINUTOS</span>
+      <h3 style="font-family:var(--font-serif); font-size:1.9rem; font-weight:400; margin-top:0.3rem;">Acompanhe o pulso respiratório abaixo</h3>
+      <div class="breath-circle-trainer" id="modal-breath-cue">Inspire...</div>
+      <div style="background:var(--bg-sand-deep); padding:1.15rem; border-radius:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+        <div><strong style="font-size:0.88rem; display:block;">Áudio Guia + Frequência Harmônica</strong><span style="font-size:0.78rem; color:var(--clay-muted);">Professora Bonança Yoga</span></div>
+        <button type="button" class="btn-primary" onclick="toggleAmbientSound(true)">Ativar Som da Prática</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="student-modal">
+    <div class="modal-window">
+      <button type="button" class="modal-close" onclick="closeModal('student-modal')">✕</button>
+      <span style="font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.15em; color:var(--terracotta);">PORTAL EXCLUSIVO • ÁREA DO ALUNO</span>
+      <h3 style="font-family:var(--font-serif); font-size:1.95rem; font-weight:400; margin:0.3rem 0 0.7rem;">Seu espaço de prática contínua</h3>
+      <form onsubmit="event.preventDefault(); alert('Bem-vindo(a) à Área do Aluno Bonança!'); closeModal('student-modal');" style="display:flex; flex-direction:column; gap:0.9rem;">
+        <input type="email" placeholder="E-mail de aluno(a)" required style="padding:0.9rem 1.1rem; border-radius:12px; border:1px solid var(--line-strong); background:var(--bg-sand);" />
+        <input type="password" placeholder="Sua senha" required style="padding:0.9rem 1.1rem; border-radius:12px; border:1px solid var(--line-strong); background:var(--bg-sand);" />
+        <button type="submit" class="btn-primary" style="justify-content:center;">Entrar na Área do Aluno</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="photos-modal">
+    <div class="modal-window">
+      <button type="button" class="modal-close" onclick="closeModal('photos-modal')">✕</button>
+      <span style="font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.15em; color:var(--terracotta);">MEMÓRIAS BONANÇA • DOWNLOAD DE FOTOS</span>
+      <h3 style="font-family:var(--font-serif); font-size:1.9rem; font-weight:400; margin:0.3rem 0 1.2rem;">Álbuns de Participantes</h3>
+      <div style="display:flex; flex-direction:column; gap:0.8rem;">
+        <div class="schedule-item">
+          <div><div class="schedule-day">MARÇO 2026 • 48 FOTOS</div><div class="schedule-title">Yoga & Café da Manhã na Varanda</div></div>
+          <button type="button" class="btn-primary" onclick="alert('Download iniciado: Yoga & Café da Manhã (.ZIP)')">Baixar (.ZIP)</button>
+        </div>
+        <div class="schedule-item">
+          <div><div class="schedule-day">JANEIRO 2026 • 62 FOTOS</div><div class="schedule-title">Imersão Travessia: Pranayama & Som</div></div>
+          <button type="button" class="btn-primary" onclick="alert('Download iniciado: Imersão Travessia (.ZIP)')">Baixar (.ZIP)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT COMPLETO E FECHADO -->
+  <script>
+    /* 1. ATO 0: CORDA VIVA DA LOGO */
+    (function() {
+      var preloader = document.getElementById('preloader');
+      var canvas = document.getElementById('logo-wave-canvas');
+      if (!preloader || !canvas) return;
+      var ctx = canvas.getContext('2d');
+      var coherenceLabel = document.getElementById('wave-coherence-label');
+      var instructionLabel = document.getElementById('preloader-instruction');
+      var skipBtn = document.getElementById('skip-preloader-btn');
+      var amplitude = 24, targetAmplitude = 24, phase = 0, isCalmed = false;
+
+      function calmDownWave(amount) {
+        if (isCalmed) return;
+        targetAmplitude = Math.max(0, targetAmplitude - amount);
+        if (targetAmplitude < 13) instructionLabel.textContent = 'SENTINDO SUA PRESENÇA • ESTABILIZANDO NO CENTRO DE GRAVIDADE...';
+        if (targetAmplitude <= 0.4) completePreloader();
+      }
+      function completePreloader() {
+        if (isCalmed) return;
+        isCalmed = true; targetAmplitude = 0;
+        coherenceLabel.textContent = 'BONANÇA: 100%';
+        instructionLabel.textContent = 'HORIZONTE EM EQUILÍBRIO • BEM-VINDO(A)';
+        preloader.classList.add('calmed');
+        setTimeout(function() { preloader.classList.add('hidden'); }, 650);
+      }
+      window.addEventListener('mousemove', function() { calmDownWave(0.8); }, { passive: true });
+      window.addEventListener('touchmove', function() { calmDownWave(1.6); }, { passive: true });
+      preloader.addEventListener('click', completePreloader);
+      skipBtn.addEventListener('click', function(e) { e.stopPropagation(); completePreloader(); });
+
+      var autoTimer = setInterval(function() {
+        if (!isCalmed) calmDownWave(0.9); else clearInterval(autoTimer);
+      }, 80);
+
+      function renderWave() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        amplitude += (targetAmplitude - amplitude) * 0.09;
+        phase += 0.11;
+        if (!isCalmed) coherenceLabel.textContent = 'TURBULÊNCIA: ' + Math.max(0, Math.round((amplitude / 24) * 86)) + '%';
+        ctx.beginPath();
+        var midY = canvas.height / 2, startX = 36, endX = canvas.width - 36;
+        for (var x = startX; x <= endX; x += 4) {
+          var norm = (x - startX) / (endX - startX);
+          var y = midY + Math.sin(norm * Math.PI * 3.5 + phase) * amplitude * Math.sin(norm * Math.PI);
+          if (x === startX) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = preloader.classList.contains('calmed') ? '#231712' : '#C88A36';
+        ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.stroke();
+        if (!preloader.classList.contains('hidden')) requestAnimationFrame(renderWave);
+      }
+      renderWave();
+    })();
+
+    /* 2. RASTROS SENSORIAIS + SUSSURROS SOMÁTICOS */
+    (function() {
+      var canvas = document.getElementById('sensory-canvas');
+      var whisperLayer = document.getElementById('whisper-layer');
+      if (!canvas || !whisperLayer) return;
+      var ctx = canvas.getContext('2d'), ripples = [], lastWhisper = 0, wIdx = 0;
+      var whispers = ['solte o peso dos ombros', 'destrave o maxilar', 'inspire em 4 tempos', 'o corpo é âncora', 'habite a pausa'];
+
+      function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+      resize(); window.addEventListener('resize', resize);
+
+      window.addEventListener('mousemove', function(e) {
+        if (Math.random() > 0.45) {
+          ripples.push({ x: e.clientX, y: e.clientY, r: 4, maxR: 80 + Math.random() * 40, a: 0.22 });
+          if (ripples.length > 20) ripples.shift();
+          var now = Date.now();
+          if (now - lastWhisper > 2600 && window.scrollY < window.innerHeight * 1.4) {
+            lastWhisper = now;
+            var el = document.createElement('div');
+            el.className = 'somatic-whisper';
+            el.textContent = whispers[wIdx++ % whispers.length];
+            el.style.left = e.clientX + 'px'; el.style.top = (e.clientY - 16) + 'px';
+            whisperLayer.appendChild(el);
+            requestAnimationFrame(function() { el.style.opacity = '0.78'; el.style.transform = 'translate(-50%, -50%) translateY(-12px)'; });
+            setTimeout(function() { el.style.opacity = '0'; setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 800); }, 1400);
+          }
+        }
+      }, { passive: true });
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (var i = ripples.length - 1; i >= 0; i--) {
+          var p = ripples[i]; p.r += (p.maxR - p.r) * 0.045; p.a *= 0.96;
+          ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.strokeStyle = 'rgba(182, 89, 56, ' + p.a.toFixed(3) + ')'; ctx.stroke();
+          if (p.a < 0.01) ripples.splice(i, 1);
+        }
+        requestAnimationFrame(animate);
+      }
+      animate();
+    })();
+
+    /* 3. FIO DE PRUMO + ESCULTURA DO HERO */
+    (function() {
+      var plumbPath = document.getElementById('plumb-path');
+      var plumbWeight = document.getElementById('plumb-weight');
+      var header = document.getElementById('site-header');
+      var heroHorizon = document.getElementById('hero-horizon-line');
+      var heroHalo = document.getElementById('hero-breath-halo');
+      var lastY = window.scrollY, vel = 0, bendX = 40, clock = 0;
+
+      window.addEventListener('scroll', function() {
+        var y = window.scrollY;
+        vel = Math.max(-36, Math.min(36, y - lastY));
+        lastY = y;
+        header.classList.toggle('scrolled', y > 40);
+      }, { passive: true });
+
+      function tick() {
+        vel *= 0.88; clock += 0.024;
+        bendX += ((40 + vel * 0.95 + Math.sin(clock) * 2.2) - bendX) * 0.12;
+        var maxS = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        var wY = 140 + Math.min(1, Math.max(0, window.scrollY / maxS)) * 760;
+        if (plumbPath && plumbWeight) {
+          plumbPath.setAttribute('d', 'M 40 0 Q ' + bendX.toFixed(1) + ' ' + wY.toFixed(1) + ' 40 1000');
+          plumbWeight.setAttribute('cx', ((40 + bendX) / 2).toFixed(1));
+          plumbWeight.setAttribute('cy', wY.toFixed(1));
+        }
+        if (heroHalo && heroHorizon) {
+          heroHalo.setAttribute('r', (76 + Math.sin(clock) * 12).toFixed(1));
+          heroHorizon.setAttribute('d', 'M 25 215 Q 150 ' + (215 + Math.sin(clock * 1.3) * 4).toFixed(1) + ' 275 215');
+        }
+        requestAnimationFrame(tick);
+      }
+      tick();
+    })();
+
+    /* 4. REVEAL ON SCROLL (GSAP + FALLBACK NATIVO) */
+    (function() {
+      var els = document.querySelectorAll('.reveal-up');
+      if (window.gsap && window.ScrollTrigger) {
+        gsap.registerPlugin(ScrollTrigger);
+        els.forEach(function(el) {
+          gsap.fromTo(el, { opacity: 0, y: 28 }, {
+            opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+            scrollTrigger: { trigger: el, start: 'top 88%' }
+          });
+        });
+      } else {
+        els.forEach(function(el) { el.classList.add('is-visible'); });
+      }
+    })();
+
+    /* 5. SIMULADOR FISIOLÓGICO */
+    var physioStates = {
+      storm: [
+        { metric: 'Alto', title: 'Cortisol & Alerta Contínuo', desc: 'Mente ruminando pendências, respiração curta no alto do peito e sensação constante de urgência.' },
+        { metric: 'Curto', title: 'Diafragma Travado', desc: 'Pouca expansão das costelas, gerando suspiros frequentes, fadiga mental e baixa oxigenação.' },
+        { metric: 'Tensão', title: 'Sobrecarga Cervical e Lombar', desc: 'Ombros elevados perto das orelhas, maxilar pressionado e compressão nos discos vertebrais.' },
+        { metric: 'Leve', title: 'Sono Fragmentado', desc: 'Dificuldade para desacelerar à noite e sensação de acordar ainda cansado pela manhã.' }
+      ],
+      calm: [
+        { metric: '-38%', title: 'Queda no Cortisol e Ansiedade', desc: 'A expiração prolongada ativa o nervo vago, desligando o modo de "luta ou fuga" e trazendo clareza mental imediata.' },
+        { metric: '+100%', title: 'Expansão da Caixa Torácica', desc: 'O diafragma destrava, aumentando a oxigenação celular e dissolvendo a sensação de aperto no peito ao fim do dia.' },
+        { metric: 'Eixo', title: 'Descompressão da Coluna', desc: 'Posturas inteligentes criam espaço entre as vértebras, aliviando dores lombares e a tensão acumulada nos ombros.' },
+        { metric: 'REM', title: 'Sono Profundo e Reparador', desc: 'Com o sistema parassimpático regulado, o corpo reaprende a descansar de verdade durante a noite.' }
+      ]
+    };
+    function setPhysioState(key) {
+      document.getElementById('btn-state-storm').classList.toggle('active', key === 'storm');
+      document.getElementById('btn-state-calm').classList.toggle('active', key === 'calm');
+      physioStates[key].forEach(function(item, idx) {
+        var i = idx + 1;
+        document.getElementById('metric-' + i).textContent = item.metric;
+        document.getElementById('title-' + i).textContent = item.title;
+        document.getElementById('desc-' + i).textContent = item.desc;
+      });
+    }
+
+    /* 6. MODALIDADES E GRADE DE HORÁRIOS */
+    var modalitiesData = {
+      online: {
+        tag: 'MODALIDADE 01 • ONLINE EM GRUPO (AO VIVO)',
+        title: 'Prática ao vivo com correção real e gravações disponíveis',
+        desc: 'Aulas transmitidas ao vivo para que a professora acompanhe suas adaptações posturais em tempo real, mais gravações na Área do Aluno.',
+        schedules: [
+          { day: 'SEGUNDAS & QUARTAS • 07H30', title: 'Despertar com Prumo (Yoga Integral)', meta: 'Vitalidade, abertura torácica e foco para o dia' },
+          { day: 'TERÇAS & QUINTAS • 19H00', title: 'Descompressão & Aterramento Noturno', meta: 'Soltar tensões da rotina e preparar o sono profundo' },
+          { day: 'SEXTAS-FEIRAS • 08H00', title: 'Prática Integrativa & Pranayama', meta: 'Respiração consciente, mantras e permanência' }
+        ]
+      },
+      estudio: {
+        tag: 'MODALIDADE 02 • PRESENCIAIS EM ESTÚDIO',
+        title: 'Acolhimento sensorial, ajustes táteis e prática em grupo reduzido',
+        desc: 'Pratique em ambiente preparado com bruma botânica de lavanda, iluminação natural, acessórios completos e ajustes presenciais.',
+        schedules: [
+          { day: 'TERÇAS & QUINTAS • 08H00', title: 'Yoga Integral Manhã no Estúdio', meta: 'Turma reduzida (máx. 8 alunos) com aromaterapia' },
+          { day: 'SEGUNDAS & QUARTAS • 18H30', title: 'Pausa de Fim de Tarde (Presencial)', meta: 'Alinhamento postural, força tranquila e relaxamento' }
+        ]
+      },
+      particular: {
+        tag: 'MODALIDADE 03 • PARTICULARES PERSONALIZADAS',
+        title: 'Uma prática desenhada 100% para a história do seu corpo',
+        desc: 'Ideal para quem busca horários flexíveis, reabilitação de dores específicas, gestantes ou aprofundamento individual.',
+        schedules: [
+          { day: 'HORÁRIOS FLEXÍVEIS • PRESENCIAL OU ONLINE', title: 'Sessão Individual Sob Medida (60 min)', meta: 'Avaliação postural + caderno personalizado de prática' }
+        ]
+      }
+    };
+
+    function switchModality(key, btnEl) {
+      document.querySelectorAll('.modality-tab').forEach(function(b) { b.classList.remove('active'); });
+      if (btnEl) btnEl.classList.add('active');
+      var d = modalitiesData[key];
+      document.getElementById('mod-tag').textContent = d.tag;
+      document.getElementById('mod-title').textContent = d.title;
+      document.getElementById('mod-desc').textContent = d.desc;
+      var list = document.getElementById('schedule-list');
+      list.innerHTML = d.schedules.map(function(s) {
+        var msg = encodeURIComponent('Olá! Gostaria de agendar a aula: ' + s.title + ' (' + s.day + ')');
+        return '<div class="schedule-item"><div><div class="schedule-day">' + s.day + '</div><div class="schedule-title">' + s.title + '</div><div class="schedule-meta">' + s.meta + '</div></div><a class="schedule-book-btn" target="_blank" rel="noopener" href="https://wa.me/5511999999999?text=' + msg + '">Reservar Horário →</a></div>';
+      }).join('');
+    }
+    switchModality('online', document.querySelector('.modality-tab'));
+
+    /* 7. MODAIS, PDF, MENU MOBILE & WEB AUDIO API */
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+    function downloadGuidePDF() {
+      var content = "CADERNO DE RESPIRACAO & ALINHAMENTO DIARIO — BONANCA YOGA\n\n1. Respiracao Quadrada (Sama Vritti): Inspire em 4s, retenha 4s, expire 4s, pause 4s.\n2. Alinhamento Sentado: Apoie os isquios sobre uma almofada firme para descomprimir a lombar.\n3. Ritual Noturno: Destrave o maxilar e solte o peso dos ombros.";
+      var blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'Caderno-Respiracao-Bonanca-Yoga.txt';
+      a.click();
+    }
+    function handleWaitlistSubmit(e) {
+      e.preventDefault();
+      var btn = document.getElementById('waitlist-submit-btn');
+      btn.textContent = 'CADASTRADO COM SUCESSO ✓';
+      e.target.reset();
+    }
+
+    var mobileBtn = document.getElementById('mobile-menu-btn');
+    var mobileOverlay = document.getElementById('mobile-nav-overlay');
+    function closeMobileMenu() { mobileOverlay.classList.remove('open'); mobileBtn.textContent = 'Menu'; }
+    mobileBtn.addEventListener('click', function() {
+      var isOpen = mobileOverlay.classList.toggle('open');
+      mobileBtn.textContent = isOpen ? 'Fechar' : 'Menu';
+    });
+    document.querySelectorAll('.mobile-link').forEach(function(link) {
+      link.addEventListener('click', closeMobileMenu);
+    });
+
+    /* SINTETIZADOR DE SOM AMBIENTE (WEB AUDIO API) */
+    var audioCtx = null, isPlayingSound = false, gainNode = null;
+    function toggleAmbientSound(forceOn) {
+      var btn = document.getElementById('sound-toggle-btn');
+      var label = document.getElementById('sound-label');
+      if (!audioCtx) {
+        var AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+        var osc1 = audioCtx.createOscillator();
+        var osc2 = audioCtx.createOscillator();
+        gainNode = audioCtx.createGain();
+        osc1.type = 'sine'; osc1.frequency.value = 174; // Frequência de aterramento
+        osc2.type = 'sine'; osc2.frequency.value = 261; // Quinta harmônica suave
+        gainNode.gain.value = 0.0001;
+        osc1.connect(gainNode); osc2.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        osc1.start(); osc2.start();
+      }
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      isPlayingSound = forceOn ? true : !isPlayingSound;
+      gainNode.gain.setTargetAtTime(isPlayingSound ? 0.045 : 0.0001, audioCtx.currentTime, 0.6);
+      btn.classList.toggle('active', isPlayingSound);
+      label.textContent = isPlayingSound ? 'Som Ativo' : 'Som';
+    }
+    document.getElementById('sound-toggle-btn').addEventListener('click', function() { toggleAmbientSound(); });
+  </script>
+</body>
+</html>
